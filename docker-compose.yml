@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  # Jupyter Notebook with SciPy and DuckDB
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./work:/home/jovyan/work # Mount the work directory for persistent data
+      - ./huggingface:/home/jovyan/.cache/huggingface
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+    deploy:
+      resources:
+        limits:
+          memory: 24g # Set the memory limit to an appropriate value
+
+  timescaledb:
+    image: timescale/timescaledb-ha:pg16 # Use TimescaleDB with PostgreSQL 16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: ankane/pgvector:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d mydb" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Neo4j database
+  neo4j:
+    image: neo4j:latest
+    environment:
+      NEO4J_AUTH: "neo4j/password"
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+
+  # MinIO as an S3-compatible storage solution
+  minio:
+    image: minio/minio:RELEASE.2024-07-29T22-14-52Z-cpuv1
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./minio_data:/data
+
+  # Redis with Redis Stack for vector database functionality
+  redis:
+    image: redis/redis-stack:7.4.0-v0
+    ports:
+      - "6379:6379"
+      - "8001:8001" # RedisInsight web interface
+    volumes:
+      - redis_data:/data
+
+  # Adminer for easy management of PostgreSQL
+  adminer:
+    image: adminer:4.8.1
+    ports:
+      - "8080:8080"
+
+  # MongoDB database
+  mongodb:
+    image: mongo:7.0.7
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  postgres_data:
+  neo4j_data:
+  minio_data:
+  redis_data:
+  mongodb_data:
