@@ -19,21 +19,13 @@ git clone https://github.com/SimeonSimeonov24/LinkedIn-Chatbot.git
    ```
 
 2. Get data from [linkedin-job-postings](https://www.kaggle.com/datasets/arshkon/linkedin-job-postings) and only move postings.csv inside the data folder
-3. Start Docker Desktop and after that run:
-
-   ```
-   docker-compose down -v
-   docker-compose up -d
-   docker ps
-   ```
-
-4. Install requirements
+3. Install requirements
 
    ```
    pip install -r requirements.txt
    ```
 
-5. Run `data_processing.py`
+4. Run `data_processing.py`
 
 ## Run
 
