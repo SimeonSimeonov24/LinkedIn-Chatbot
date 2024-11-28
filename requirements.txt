@@ -1,0 +1,7 @@
+pandas==2.2.3
+python-dotenv==1.0.1
+psycopg2==2.9.10
+pymongo==4.10.1
+ollama==0.3.3
+minio==7.2.11
+redis==5.2.0

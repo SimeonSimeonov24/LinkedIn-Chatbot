@@ -2,7 +2,6 @@ import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from pymongo import MongoClient
 import ollama
-import wikipediaapi
 import time
 import subprocess
 from minio import Minio

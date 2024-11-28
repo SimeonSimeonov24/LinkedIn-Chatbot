@@ -148,7 +148,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-data/
+data/*
 
 
 # pytype static type analyzer
@@ -168,6 +168,5 @@ minio_data/.minio.sys/buckets/.usage.json/xl.meta
 minio_data/.minio.sys/config/config.json/xl.meta
 minio_data/.minio.sys/config/iam/format.json/xl.meta
 minio_data/.minio.sys/pool.bin/xl.meta
-minio_data/.minio.sys/tmp/68b8097e-5bac-4213-8e6a-8230be21a32f
-minio_data/.minio.sys/tmp/7ed4f6cc-1231-4c34-bf4c-3f23c1c98f4f
 minio_data/.minio.sys/format.json
+minio_data/.minio.sys/tmp/*
